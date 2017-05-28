@@ -28,7 +28,8 @@ class UsersRequest extends Request
             'password'=>'required | min:8',
             'email'=>'required',
             'role_id'=>'required',
-            'is_active'=>'required'
+            'is_active'=>'required',
+            'photo_id'=>' mimes:jpeg,jpg,png | required  | max:1000'
         ];
     }
 }

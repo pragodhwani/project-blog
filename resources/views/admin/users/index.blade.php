@@ -24,9 +24,9 @@
                     <td>{{$user->email}}</td>
                     <td>{{$user->role->name}}</td>
                     <td>@if($user->is_active==1)
-                            <img class="status1" src="../images/online.png" style="height: 20px" >
+                            <img class="status1" src="../images/online.png" >
                         @else
-                            <img src="../images/offline.png" class="status1" style="height: 20px">
+                            <img src="../images/offline.png" class="status1">
                         @endif
                     </td>
                     <td>{{$user->created_at->diffForHumans()}}</td>

@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UsersRequest;
 use Illuminate\Http\Request;
+use App\Photo;
 
 use App\Http\Requests;
 
 use App\User;
-
+use Illuminate\Support\Facades\App;
 
 
 class AdminUsersController extends Controller
@@ -43,11 +44,18 @@ class AdminUsersController extends Controller
     public function store(UsersRequest $request)
     {
         $users=$request->all();
-        $users['password']=bcrypt($users['password']);
-        //echo dd($users);
-        User::create($users);
-        return redirect('/admin/users/');
+        if($file=$request->file('photo_id')) {
+            $users['password'] = bcrypt($users['password']);
+            $name=time() . $file->getClientOriginalName();
+            $photo = Photo::create(['file' => $name]);
+            $file->move('images',$name);
+            $users['photo_id'] = $photo->id;
+            //echo dd($users);
+            User::create($users);
+            return redirect('/admin/users/');
+        }
     }
+
 
     /**
      * Display the specified resource.
