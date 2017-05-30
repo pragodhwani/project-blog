@@ -12,6 +12,7 @@ use App\Http\Requests;
 
 use App\User;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 
 
 class AdminUsersController extends Controller
@@ -54,6 +55,7 @@ class AdminUsersController extends Controller
             $users['photo_id'] = $photo->id;
             //echo dd($users);
             User::create($users);
+            Session::flash('message',public_path());
             return redirect('/admin/users/');
         }
     }
@@ -95,18 +97,20 @@ class AdminUsersController extends Controller
         $user=User::findOrFail($id);
         $data=$request->all();
         if($file=$request->file('photo_id')) {
-            echo "mmmmm";
+
             $data['password'] = bcrypt($data['password']);
-            $name=time().$file->getClientOriginalExtension();
+            $name=time() . $file->getClientOriginalName();
             $file->move('images',$name);
             $photo=Photo::create(['file'=>$name]);
             $data['photo_id']=$photo->id;
             $user->update($data);
+            Session::flash('message',"Updation Successfull");
             return redirect('admin/users');
         }
         else{
             $data['password'] = bcrypt($data['password']);
             $user->update($data);
+            Session::flash('message',"Updation Successfull");
             return redirect('admin/users');
         }
     }
@@ -119,6 +123,13 @@ class AdminUsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user=User::findOrFail($id);
+        unlink(public_path().$user->photo->file);
+        $idd=$user->photo_id;
+        $photo=Photo::findOrFail($idd);
+        $photo->delete();
+        $user->delete();
+        Session::flash('message',"Deletion Successfull");
+        return redirect('admin/users');
     }
 }

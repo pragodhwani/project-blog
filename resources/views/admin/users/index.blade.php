@@ -2,6 +2,10 @@
 
 @section('content')
     <h1>Users</h1>
+    @if(\Illuminate\Support\Facades\Session::has('message'))
+        <div class="alert alert-success" role="alert">{{Session('message')}}</div>
+
+        @endif
     <p>{{\Carbon\Carbon::now()}}</p>
     <table class="table table-hover">
         <thead>
@@ -34,7 +38,9 @@
                     </td>
                     <td>{{$user->created_at->diffForHumans()}}</td>
                     <td>{{$user->updated_at->diffForHumans()}}</td>
-                    <td><a href="{{route('admin.users.edit',$user->id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></td>
+                    <td><a href="{{route('admin.users.edit',$user->id)}}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        &nbsp; &nbsp;<a href="{{route('admin.users.edit',$user->id)}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                    </td>
                 </tr>
             @endforeach
         @endif
