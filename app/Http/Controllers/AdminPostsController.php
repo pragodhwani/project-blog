@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Photo;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,8 @@ class AdminPostsController extends Controller
     public function index()
     {
         $posts=Posts::all();
-        return view('admin.posts.index',compact('posts'));
+
+        return view('admin.posts.index',compact('posts','categories'));
     }
 
     /**
@@ -32,8 +34,8 @@ class AdminPostsController extends Controller
      */
     public function create()
     {
-
-        return view('admin.posts.create');
+        $category=Category::lists('name','id')->all();
+        return view('admin.posts.create',compact('category'));
     }
 
     /**
@@ -54,7 +56,7 @@ class AdminPostsController extends Controller
             $input['user_id'] = $user->id;
            //dd($input);
            Posts::create($input);
-            return view('admin.posts.index');
+            return redirect('admin/posts');
 
         }
     }
